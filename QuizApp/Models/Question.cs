@@ -8,9 +8,7 @@ namespace QuizApp.Models
         public List<string> Options { get; set; }
         public int CorrectAnswerIndex { get; set; }
     }
-   
-
-    public class Quiz
+public class Quiz
     {
         public List<Question> Questions { get; set; }
         public List<int> UserAnswers { get; set; }

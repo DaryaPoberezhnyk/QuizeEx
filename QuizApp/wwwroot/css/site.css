@@ -1,187 +1,189 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html >
+<html lang="en" >
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - QuizApp</title>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" />
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-            color: #444;
-            overflow-x: hidden;
-        }
+<head >
+<meta charset="UTF-8" >
+<meta name="viewport" content="width=device-width, initial-scale=1.0" >
+<title > @ViewBag.Title - QuizApp</title >
+<link href="~/bootstrap/dist/css/bootstrap.css" rel="stylesheet" / >
+<link href="~/css/site.css" rel="stylesheet" / >
+<style >
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    color: #444;
+    overflow-x: hidden;
+    animation: gradientAnimation 15s ease infinite;
+}
 
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
 
-        .navbar {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+.navbar {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
 
-        .navbar-nav .nav-link {
-            font-size: 1.1rem;
-            transition: color 0.3s;
-        }
+.navbar-nav .nav-link {
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
 
-        .navbar-nav .nav-link:hover {
-            color: #ff6f61;
-        }
+    .navbar-nav .nav-link:hover {
+        color: #ff6f61;
+    }
 
-        .container {
-            margin-top: 4rem;
-        }
+.container {
+    margin-top: 4rem;
+}
 
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 10px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+.card {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
 
-        .card-title {
-            font-size: 1.75rem;
-            font-weight: bold;
-        }
+.card-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+}
 
-        .btn-primary {
-            background-color: #ff6f61;
-            border: none;
-            transition: background-color 0.3s, transform 0.3s;
-        }
+.btn-primary {
+    background-color: #ff6f61;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
 
-        .btn-primary:hover {
-            background-color: #ff3f31;
-            transform: translateY(-2px);
-        }
+    .btn-primary:hover {
+        background-color: #ff3f31;
+        transform: translateY(-2px);
+    }
 
-        footer {
-            background-color: #222;
-            color: #fff;
-            padding: 1.5rem;
-            text-align: center;
-            border-top: 4px solid #ff6f61;
-        }
+footer {
+    background-color: #222;
+    color: #fff;
+    padding: 1.5rem;
+    text-align: center;
+    border-top: 4px solid #ff6f61;
+}
 
-        footer p {
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 300;
-        }
+    footer p {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 300;
+    }
 
-        .social-icons {
-            margin-top: 0.5rem;
-        }
+.social-icons {
+    margin-top: 0.5rem;
+}
 
-        .social-icons a {
-            color: #fff;
-            margin: 0 10px;
-            font-size: 1.25rem;
-            transition: color 0.3s;
-        }
+    .social-icons a {
+        color: #fff;
+        margin: 0 10px;
+        font-size: 1.25rem;
+        transition: color 0.3s;
+    }
 
         .social-icons a:hover {
             color: #ff6f61;
         }
 
-        /* Animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+.skipped {
+    background-color: #fff3cd;
+    color: #856404;
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-        .animated-fadeIn {
-            animation: fadeIn 1s ease-out;
-        }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        /* Background Animation */
-        @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
+.animated-fadeIn {
+    animation: fadeIn 1s ease-out;
+}
 
-            50% {
-                background-position: 100% 50%;
-            }
+/* Background Animation */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
 
-            100% {
-                background-position: 0% 50%;
-            }
-        }
+    50% {
+        background-position: 100% 50%;
+    }
 
-        body {
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientAnimation 15s ease infinite;
-        }
-    </style>
-</head>
+    100% {
+        background-position: 0% 50%;
+    }
+}
 
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-            <a class="navbar-brand animated-fadeIn" href="@Url.Action('Index', 'Home')">QuizApp</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto animated-fadeIn">
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action('Index', 'Quiz')">Quiz</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action('Index', 'Home')">Home</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+</style >
+</head >
 
-    <div class="container mt-4">
-        <div class="card animated-fadeIn">
-            @RenderBody()
-        </div>
-    </div>
+<body >
+<header >
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" >
+<a class="navbar-brand animated-fadeIn" href="@Url.Action('Index', 'Home')" > QuizApp</a >
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" >
+<span class="navbar-toggler-icon" > </span >
+</button >
+<div class="collapse navbar-collapse" id="navbarNav" >
+<ul class="navbar-nav ml-auto animated-fadeIn" >
+<li class="nav-item" >
+<a class="nav-link" href="@Url.Action('Index', 'Quiz')" > Quiz</a >
+</li >
+<li class="nav-item" >
+<a class="nav-link" href="@Url.Action('Index', 'Home')" > Home</a >
+</li >
+</ul >
+</div >
+</nav >
+</header >
 
-    <footer>
-        <p>&copy; @DateTime.Now.Year - QuizApp. All rights reserved.</p>
-        <div class="social-icons">
-            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-        </div>
-    </footer>
+<div class="container mt-4" >
+<div class="card animated-fadeIn" >
+@RenderBody()
+</div >
+</div >
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/popper.js/dist/umd/popper.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-</body>
+<footer >
+<p > &copy; @DateTime.Now.Year - QuizApp. All rights reserved.</p >
+<div class="social-icons" >
+<a href="https://facebook.com" target="_blank" > <i class="fab fa-facebook-f" > </i > </a >
+<a href="https://twitter.com" target="_blank" > <i class="fab fa-twitter" > </i > </a >
+<a href="https://instagram.com" target="_blank" > <i class="fab fa-instagram" > </i > </a >
+<a href="https://linkedin.com" target="_blank" > <i class="fab fa-linkedin-in" > </i > </a >
+</div >
+</footer >
 
-</html>
+<script src="~/jquery/dist/jquery.min.js" > </script >
+<script src="~/popper.js/dist/umd/popper.min.js" > </script >
+<script src="~/bootstrap/dist/js/bootstrap.js" > </script >
+<script src="https://kit.fontawesome.com/a076d05399.js" > </script >
+</body >
+
+</html >

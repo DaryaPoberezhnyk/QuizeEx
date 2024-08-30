@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QuizApp.Models.QuizResult>
+﻿@model List<QuizApp.Controllers.QuizResult>
 
 @{
     ViewBag.Title = "Quiz Results";
@@ -12,41 +12,42 @@
     <title>Quiz Results</title>
     <link href="~/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
+    <style>
+        .skipped {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h2 class="text-center">Quiz Results</h2>
-
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">You scored @ViewBag.Score out of @ViewBag.TotalQuestions</h4>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Question</th>
-                            <th>Your Answer</th>
-                            <th>Correct</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var result in Model)
-                        {
-                            <tr>
-                                <td>@result.Question.Text</td>
-                                <td>@result.Question.Options[result.UserAnswer]</td>
-                                <td class="@(result.IsCorrect ? "text-success" : "text-danger")">
-                                    @(result.IsCorrect ? "Correct" : "Incorrect")
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-                <form asp-action="Restart" method="post">
-                    <button type="submit" class="btn btn-primary">Restart Quiz</button>
-                </form>
-            </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Your Answer</th>
+                    <th>Correct Answer</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var result in Model)
+                {
+                    <tr class="@(result.IsSkipped ? "skipped" : (result.IsCorrect ? "table-success" : "table-danger"))">
+                        <td>@result.Question.Text</td>
+                        <td>@(result.UserAnswer.HasValue ? result.Question.Options[result.UserAnswer.Value] : "Skipped")</td>
+                        <td>@result.Question.Options[result.Question.CorrectAnswerIndex]</td>
+                        <td>@(result.IsSkipped ? "Skipped" : (result.IsCorrect ? "Correct" : "Incorrect"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-center">
+            <h4>Your Score: @ViewBag.Score out of @ViewBag.TotalQuestions</h4>
+            <form asp-action="Restart" method="post">
+                <button type="submit" class="btn btn-primary">Restart Quiz</button>
+            </form>
         </div>
     </div>
 </body>

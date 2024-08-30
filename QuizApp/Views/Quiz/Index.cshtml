@@ -11,9 +11,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            var timeLeft = @ViewBag.TimeRemaining; // Initialize timer
+            var timeLeft = @ViewBag.TimeRemainingTotalSeconds; // Initialize timer
             var timer = setInterval(function () {
-                $("#timer").text("Time left: " + timeLeft + "s");
+                $("#timer").text("Time left: " + Math.max(timeLeft, 0) + "s");
                 timeLeft--;
 
                 if (timeLeft < 0) {
@@ -36,13 +36,13 @@
                         Question @ViewBag.CurrentQuestionIndex of @ViewBag.TotalQuestions
                     </h4>
                     <p>@Model.Text</p>
-                    <div id="timer" class="mb-3">Time left: @ViewBag.TimeRemaining s</div>
+                    <div id="timer" class="mb-3">Time left: @ViewBag.TimeRemainingTotalSeconds s</div>
 
                     <form asp-action="Index" method="post">
                         @for (int i = 0; i < Model.Options.Count; i++)
                         {
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="selectedAnswer" value="@i" id="option@i" required />
+                                <input class="form-check-input" type="radio" name="selectedAnswer" value="@i" id="option@i" />
                                 <label class="form-check-label" for="option@i">
                                     @Model.Options[i]
                                 </label>
@@ -56,6 +56,7 @@
                                 </div>
                             }
                             <button type="submit" name="action" value="Next" class="btn btn-primary">Next</button>
+                            <button type="submit" name="action" value="Skip" class="btn btn-warning">Skip</button>
                             @if (ViewBag.CurrentQuestionIndex == ViewBag.TotalQuestions)
                             {
                                 <button type="submit" name="action" value="Finish" class="btn btn-danger">Finish</button>
