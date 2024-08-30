@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<QuizApp.Models.QuizResult>
+
+@{
     ViewBag.Title = "Quiz Results";
 }
 
@@ -8,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Results</title>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
 </head>
 <body>
@@ -28,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var result in ViewBag.Results)
+                        @foreach (var result in Model)
                         {
                             <tr>
                                 <td>@result.Question.Text</td>

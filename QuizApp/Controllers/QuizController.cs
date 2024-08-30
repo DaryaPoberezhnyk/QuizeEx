@@ -6,6 +6,12 @@ using System.Linq;
 
 namespace QuizApp.Controllers
 {
+    public class QuizResult
+    {
+        public Question Question { get; set; }
+        public int UserAnswer { get; set; }
+        public bool IsCorrect { get; set; }
+    }
     public class QuizController : Controller
     {
         private static Quiz _quiz;
@@ -21,6 +27,7 @@ namespace QuizApp.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            _quiz.UpdateTime();
             var currentQuestion = _quiz.GetCurrentQuestion();
             if (currentQuestion == null)
             {
@@ -44,14 +51,10 @@ namespace QuizApp.Controllers
 
             if (action == "Next")
             {
-                _quiz.CurrentQuestionIndex++;
-                if (_quiz.CurrentQuestionIndex < _quiz.Questions.Count)
-                {
-                    // Shuffle options
-                    var currentQuestion = _quiz.GetCurrentQuestion();
-                    var rng = new Random();
-                    currentQuestion.Options = currentQuestion.Options.OrderBy(o => rng.Next()).ToList();
-                }
+                _quiz.MoveToNextQuestion();
+                var currentQuestion = _quiz.GetCurrentQuestion();
+                var rng = new Random();
+                currentQuestion.Options = currentQuestion.Options.OrderBy(o => rng.Next()).ToList();
             }
 
             if (_quiz.CurrentQuestionIndex >= _quiz.Questions.Count || action == "Finish")
@@ -65,6 +68,8 @@ namespace QuizApp.Controllers
                 return RedirectToAction("Result");
             }
 
+            _quiz.UpdateTime();
+
             ViewBag.CurrentQuestionIndex = _quiz.CurrentQuestionIndex + 1;
             ViewBag.TotalQuestions = _quiz.Questions.Count;
             ViewBag.TimeRemaining = _quiz.TimeRemaining;
@@ -74,7 +79,7 @@ namespace QuizApp.Controllers
 
         public IActionResult Result()
         {
-            var results = new List<(Question Question, int UserAnswer, bool IsCorrect)>();
+            var results = new List<QuizResult>();
             var score = 0;
 
             for (int i = 0; i < _quiz.Questions.Count; i++)
@@ -84,14 +89,19 @@ namespace QuizApp.Controllers
                 {
                     score++;
                 }
-                results.Add((_quiz.Questions[i], _quiz.UserAnswers[i], isCorrect));
+                results.Add(new QuizResult
+                {
+                    Question = _quiz.Questions[i],
+                    UserAnswer = _quiz.UserAnswers[i],
+                    IsCorrect = isCorrect
+                });
             }
 
             ViewBag.Results = results;
             ViewBag.Score = score;
             ViewBag.TotalQuestions = _quiz.Questions.Count;
 
-            return View();
+            return View(results); // передаємо results в View
         }
 
         [HttpPost]

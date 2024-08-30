@@ -8,13 +8,15 @@ namespace QuizApp.Models
         public List<string> Options { get; set; }
         public int CorrectAnswerIndex { get; set; }
     }
+   
 
     public class Quiz
     {
         public List<Question> Questions { get; set; }
         public List<int> UserAnswers { get; set; }
         public int CurrentQuestionIndex { get; set; }
-        public int TimeRemaining { get; set; } // Time remaining in seconds
+        public int TimeRemaining { get; set; }
+        private DateTime _startTime { get; set; }
 
         public Quiz()
         {
@@ -172,7 +174,9 @@ namespace QuizApp.Models
 
             UserAnswers = new List<int>(new int[Questions.Count]);
             CurrentQuestionIndex = 0;
-            TimeRemaining = 600; // 10 minutes timer
+            TimeRemaining = 30;
+            _startTime = DateTime.Now;
+
         }
 
         public Question GetCurrentQuestion()
@@ -182,6 +186,24 @@ namespace QuizApp.Models
                 return Questions[CurrentQuestionIndex];
             }
             return null;
+        }
+        public void UpdateTime()
+        {
+            var elapsed = (DateTime.Now - _startTime).TotalSeconds;
+            TimeRemaining = Math.Max(0, 30- (int)elapsed);
+            if (TimeRemaining <= 0)
+            {
+                MoveToNextQuestion();
+            }
+        }
+        public void MoveToNextQuestion()
+        {
+            CurrentQuestionIndex++;
+            _startTime = DateTime.Now; 
+            if (CurrentQuestionIndex >= Questions.Count)
+            {
+                CurrentQuestionIndex = Questions.Count - 1;
+            }
         }
     }
 }
