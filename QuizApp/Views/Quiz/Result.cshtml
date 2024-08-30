@@ -1,0 +1,65 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Result";
+    var results = ViewBag.Results as List<(QuizApp.Models.Question Question, int UserAnswer, bool IsCorrect)>;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Quiz Results</h2>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Your Score: @ViewBag.Score out of @ViewBag.TotalQuestions</h4>
+                <hr />
+                <ul class="list-group">
+                    @if (results != null)
+                    {
+                        @foreach (var result in results)
+                        {
+                            var questionText = result.Question.Text;
+                            var userAnswer = result.UserAnswer;
+                            var isCorrect = result.IsCorrect;
+                            var correctAnswerIndex = result.Question.CorrectAnswerIndex;
+
+                            <li class="list-group-item">
+                                <strong>@questionText</strong>
+                                <br />
+                                @if (isCorrect)
+                                {
+                                    <span>
+                                        Your Answer: <span style="color: limegreen; font-style:italic; "> @result.Question.Options[userAnswer] (Correct)</span>
+                                    </span>
+
+                                }
+                                else
+                                {
+                                    <span>
+                                        Your Answer: <span style="color: red; font-style:italic; "> @result.Question.Options[userAnswer] (Incorrect)</span></span>
+                                    <br />
+                                    <span>Correct Answer: @result.Question.Options[correctAnswerIndex]</span>
+                                }
+                            </li>
+                        }
+                    }
+                </ul>
+                <form asp-action="Restart" method="post" class="mt-3">
+                    <button type="submit" class="btn btn-primary">Restart Quiz</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/popper.js/dist/umd/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
