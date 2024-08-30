@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApp.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuizApp.Controllers
 {
@@ -25,8 +27,9 @@ namespace QuizApp.Controllers
                 return RedirectToAction("Result");
             }
 
-            ViewBag.CurrentQuestionIndex = _quiz.CurrentQuestionIndex + 1; // +1 for 1-based index
+            ViewBag.CurrentQuestionIndex = _quiz.CurrentQuestionIndex + 1; // +1 для 1-базового індексу
             ViewBag.TotalQuestions = _quiz.Questions.Count;
+            ViewBag.TimeRemaining = _quiz.TimeRemaining;
 
             return View(currentQuestion);
         }
@@ -42,6 +45,13 @@ namespace QuizApp.Controllers
             if (action == "Next")
             {
                 _quiz.CurrentQuestionIndex++;
+                if (_quiz.CurrentQuestionIndex < _quiz.Questions.Count)
+                {
+                    // Shuffle options
+                    var currentQuestion = _quiz.GetCurrentQuestion();
+                    var rng = new Random();
+                    currentQuestion.Options = currentQuestion.Options.OrderBy(o => rng.Next()).ToList();
+                }
             }
 
             if (_quiz.CurrentQuestionIndex >= _quiz.Questions.Count || action == "Finish")
@@ -49,17 +59,19 @@ namespace QuizApp.Controllers
                 return RedirectToAction("Result");
             }
 
-            var currentQuestion = _quiz.GetCurrentQuestion();
-            if (currentQuestion == null)
+            var updatedQuestion = _quiz.GetCurrentQuestion();
+            if (updatedQuestion == null)
             {
                 return RedirectToAction("Result");
             }
 
             ViewBag.CurrentQuestionIndex = _quiz.CurrentQuestionIndex + 1;
             ViewBag.TotalQuestions = _quiz.Questions.Count;
+            ViewBag.TimeRemaining = _quiz.TimeRemaining;
 
-            return View(currentQuestion);
+            return View(updatedQuestion);
         }
+
         public IActionResult Result()
         {
             var results = new List<(Question Question, int UserAnswer, bool IsCorrect)>();
@@ -82,11 +94,10 @@ namespace QuizApp.Controllers
             return View();
         }
 
-
         [HttpPost]
         public IActionResult Restart()
         {
-            _quiz = new Quiz(); 
+            _quiz = new Quiz();
             return RedirectToAction("Index");
         }
     }

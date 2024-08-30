@@ -8,6 +8,21 @@
     <title>Quiz</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var timeLeft = @ViewBag.TimeRemaining; // Initialize timer
+            var timer = setInterval(function () {
+                $("#timer").text("Time left: " + timeLeft + "s");
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    $("form").submit(); // Auto-submit the form if time runs out
+                }
+            }, 1000);
+        });
+    </script>
 </head>
 <body>
     <div class="container mt-5">
@@ -21,18 +36,25 @@
                         Question @ViewBag.CurrentQuestionIndex of @ViewBag.TotalQuestions
                     </h4>
                     <p>@Model.Text</p>
+                    <div id="timer" class="mb-3">Time left: @ViewBag.TimeRemaining s</div>
 
                     <form asp-action="Index" method="post">
                         @for (int i = 0; i < Model.Options.Count; i++)
                         {
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="selectedAnswer" value="@i" id="option@i" />
+                                <input class="form-check-input" type="radio" name="selectedAnswer" value="@i" id="option@i" required />
                                 <label class="form-check-label" for="option@i">
                                     @Model.Options[i]
                                 </label>
                             </div>
                         }
                         <div class="mt-3">
+                            @if (ViewBag.IsCorrect != null)
+                            {
+                                <div class="alert @(ViewBag.IsCorrect ? "alert-success" : "alert-danger")">
+                                    @(ViewBag.IsCorrect ? "Correct!" : "Wrong answer.")
+                                </div>
+                            }
                             <button type="submit" name="action" value="Next" class="btn btn-primary">Next</button>
                             @if (ViewBag.CurrentQuestionIndex == ViewBag.TotalQuestions)
                             {
@@ -44,9 +66,5 @@
             </div>
         }
     </div>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/popper.js/dist/umd/popper.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
